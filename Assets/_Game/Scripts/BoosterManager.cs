@@ -12,7 +12,8 @@ public struct Booster
     public enum BoosterType { biggerHole, fasterHole, moreTime }
     [field: SerializeField] public BoosterType Type { get; private set; }
     [field: SerializeField] public Button BoosterButton { get; private set; }
-    [field: SerializeField] public float BoosterValue { get; private set; }
+    [field: SerializeField] public float BoosterMax { get; private set; }
+    [field: SerializeField] public float BoosterIncreaseValue { get; private set; }
 }
 
 public class BoosterManager : MonoBehaviour
@@ -63,14 +64,20 @@ public class BoosterManager : MonoBehaviour
             case Booster.BoosterType.fasterHole:
                 selectedBooster.BoosterButton.onClick.AddListener(() =>
                 {
-                    agent.speed = (selectedBooster.BoosterValue);
+                    if (agent.speed < selectedBooster.BoosterMax)
+                    {
+                        agent.speed += selectedBooster.BoosterIncreaseValue;
+                    }
                     //BE_SetBoosterMenuVisualActive(false);
                 });
                 break;
             case Booster.BoosterType.moreTime:
                 selectedBooster.BoosterButton.onClick.AddListener(() =>
                 {
-                    hole.SetLevelTimeMax(selectedBooster.BoosterValue);
+                    if (hole.GetTime() < selectedBooster.BoosterMax)
+                    {
+                        hole.IncreaseLevelTimeMax(selectedBooster.BoosterIncreaseValue);
+                    }
                     //BE_SetBoosterMenuVisualActive(false);
                 });
                 break;

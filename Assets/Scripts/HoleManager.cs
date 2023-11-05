@@ -12,6 +12,7 @@ public class HoleManager : MonoBehaviour
     private float circleCapacity;
     [SerializeField] private float time = 20;
     [SerializeField] private Image circleImg;
+    [SerializeField] private Reward reward;
     [SerializeField] private Transform holeGameObj;
     [SerializeField] private TextMeshProUGUI timer_txt;
     [SerializeField] private RectTransform timeDoneBar;
@@ -25,6 +26,7 @@ public class HoleManager : MonoBehaviour
     }
 
     HoleSizeClass _holeSizeClass = new HoleSizeClass();
+    private float remainTime;
 
     void Start()
     {
@@ -49,7 +51,6 @@ public class HoleManager : MonoBehaviour
         if (circleImg.fillAmount.Equals(1f))
         {
             Enlarge();
-
         }
     }
 
@@ -70,7 +71,7 @@ public class HoleManager : MonoBehaviour
 
     private IEnumerator timer(float time)
     {
-        float remainTime = time;
+        remainTime = time;
 
         while (remainTime >= 0)
         {
@@ -81,7 +82,7 @@ public class HoleManager : MonoBehaviour
             {
                 timeDoneBar.DOAnchorPosX(0, 1f).SetEase(Ease.OutBounce);
                 yield return new WaitForSecondsRealtime(2f);
-                SceneManager.LoadScene("BossFight_Level");
+                reward.gameObject.SetActive(true);
             }
 
             yield return new WaitForSecondsRealtime(1f);
@@ -111,9 +112,14 @@ public class HoleManager : MonoBehaviour
         }
     }
 
-    public void SetLevelTimeMax(float time)
+    public void IncreaseLevelTimeMax(float increaseValue)
     {
         StopAllCoroutines();
-        StartCoroutine(timer(time));
+        StartCoroutine(timer(remainTime + increaseValue));
+    }
+
+    public float GetTime()
+    {
+        return remainTime;
     }
 }
