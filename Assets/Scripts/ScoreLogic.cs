@@ -18,6 +18,7 @@ public class ScoreLogic : MonoBehaviour
     void Awake()
     {
         Instance = this;
+        Score = PlayerPrefs.GetInt("Coins");
         UpdateScore();
     }
 
@@ -86,20 +87,26 @@ public class ScoreLogic : MonoBehaviour
     //    }
     //}
 
-    //void OnDisable()
-    //{
-    //    SaveCoinsGathered();
-    //}
+    void OnDisable()
+    {
+        SaveCoinsGathered();
+    }
 
-    //void OnApplicationPause(bool pause)
-    //{
-    //    if (pause)
-    //    {
-    //        Debug.Log("Paaaused: ");
-    //        SaveCoinsGathered();
+    private void SaveCoinsGathered()
+    {
+        PlayerPrefs.SetInt("Coins", (int)Score);
+    }
 
-    //    }
-    //}
+
+    void OnApplicationPause(bool pause)
+    {
+        if (pause)
+        {
+            Debug.Log("Paaaused: ");
+            SaveCoinsGathered();
+
+        }
+    }
 
 
 }
